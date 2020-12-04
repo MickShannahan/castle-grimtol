@@ -7,9 +7,8 @@ namespace CastleGrimtol.Project.Models
   {
     public string Name { get; set; }
     public string Description { get; set; }
-    public List<Item> Items { get; set; }
-
-    public List<NPC> NPCs { get; set; }
+    public List<IItem> Items { get; set; }
+    public Dictionary<string, NPC> NPCs { get; set; }
     public Dictionary<string, IRoom> Exits { get; set; }
     public Dictionary<string, bool> Locked { get; set; }
 
@@ -17,25 +16,10 @@ namespace CastleGrimtol.Project.Models
     {
       Name = name;
       Description = description;
-    }
-
-    public string EnterRoom()
-    {
-      string message = $"You enter {Name}, {Description}. ";
-      if (Items.Count > 0)
-      {
-        Items.ForEach(item =>
-        {
-          message += item.Name + ". ";
-        });
-      }
-
-      message += "There are exits to the ";
-      foreach (var exit in Exits)
-      {
-        message += exit.Key;
-      };
-      return message;
+      Exits = new Dictionary<string, IRoom>();
+      Locked = new Dictionary<string, bool>();
+      NPCs = new Dictionary<NPC, bool>();
+      Items = new List<IItem>();
     }
 
     public string UnlockRoom(string key)

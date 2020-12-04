@@ -10,6 +10,7 @@ namespace CastleGrimtol.Project.Models
     public int MaxHealth { get; set; }
     public int CurrentHealth { get; set; }
     public string Class { get; set; }
+    public IItem Weapon { get; set; }
     public bool Hostile { get; set; }
     public IRoom Room { get; set; }
 

@@ -8,8 +8,8 @@ namespace CastleGrimtol.Project.Models
   {
     public bool Running { get; set; }
     public Player Player { get; set; }
-    public Room CurrentRoom { get; set; }
-    public List<String> Commands { get; set; }
+    public IRoom CurrentRoom { get; set; }
+    public List<String> Commands { get; set; } = new List<string>();
     public Game(Player player)
     {
       Running = true;
@@ -17,9 +17,27 @@ namespace CastleGrimtol.Project.Models
 
     }
 
-    public void ChangeRoom(Room room)
+    public string ChangeRoom(IRoom room)
     {
+      foreach (var item in room.Locked)
+      {
+        if (item.Value == true)
+        {
+          return $"You cannot enter {room.Name} the way is locked";
+        }
+      }
       CurrentRoom = room;
+      return $"You enter {room.Name}";
+    }
+
+    public string ListCommands()
+    {
+      string message = "You can ";
+      Commands.ForEach(command =>
+      {
+        message += command + "\n ";
+      });
+      return message;
     }
   }
 }
