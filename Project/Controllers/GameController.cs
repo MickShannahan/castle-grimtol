@@ -90,16 +90,16 @@ namespace CastleGrimtol.Controllers
       switch (colorInput)
       {
         case "1":
-          color = ConsoleColor.DarkRed;
+          color = ConsoleColor.Red;
           break;
         case "2":
-          color = ConsoleColor.DarkGreen;
+          color = ConsoleColor.Green;
           break;
         case "3":
           color = ConsoleColor.DarkBlue;
           break;
         case "4":
-          color = ConsoleColor.DarkYellow;
+          color = ConsoleColor.Yellow;
           break;
         case "5":
           color = ConsoleColor.DarkMagenta;
@@ -158,9 +158,12 @@ namespace CastleGrimtol.Controllers
         case "strike":
           Attack(game, input.Split(" ")[1]);
           break;
+        case "use":
+          UseItem(game, input.Split(" ")[1]);
+          break;
         default:
           Console.ForegroundColor = ConsoleColor.DarkRed;
-          Console.WriteLine("I'm sorry that command was not recognized");
+          Console.WriteLine("Thy Command was not recognized");
           Console.ForegroundColor = ConsoleColor.Gray;
           break;
       }
@@ -185,6 +188,11 @@ namespace CastleGrimtol.Controllers
       if (game.CurrentRoom.Exits.ContainsKey(direction))
       {
         Console.WriteLine(game.ChangeRoom(game.CurrentRoom.Exits[direction]));
+      }
+      else
+      {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine($"Thy Path {direction} does not exist...");
       }
     }
 
@@ -213,6 +221,13 @@ namespace CastleGrimtol.Controllers
       Console.WriteLine(player.ListInventory());
     }
 
+    public void UseItem(Game game, string itemName)
+    {
+      // TODO Expand this
+      IItem item = game.Player.Inventory.Find(i => i.Name == itemName);
+      Console.WriteLine($"You Used the {item.Name}");
+    }
+
 
     private void Equip(Player player, string itemName)
     {
@@ -233,11 +248,19 @@ namespace CastleGrimtol.Controllers
     public void Attack(Game game, string targetString)
     {
       Player player = game.Player;
-      NPC target = game.CurrentRoom.NPCs[targetString];
-      target.TakeDamage(player.Weapon.Damage);
-      if (target.CurrentHealth > 0)
+      if (game.CurrentRoom.NPCs.ContainsKey(targetString))
       {
-        player.TakeDamage(target.Weapon.Damage);
+        NPC target = game.CurrentRoom.NPCs[targetString];
+        target.TakeDamage(player.Weapon.Damage);
+        if (target.CurrentHealth > 0)
+        {
+          player.TakeDamage(target.Weapon.Damage);
+        }
+      }
+      else
+      {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine($"{targetString} is not a valid target");
       }
     }
 
@@ -262,10 +285,6 @@ namespace CastleGrimtol.Controllers
 
     }
 
-    public void UseItem(string itemName)
-    {
-      throw new System.NotImplementedException();
-    }
     private void GameSetup(Game game)
     {
       // Room Creation -------------------------------------------------------
@@ -278,7 +297,8 @@ namespace CastleGrimtol.Controllers
       Item stool = new Item("stool", "Made of worn wood and covered in splinters.", 5, 2);
       startRoom.Items.Add(stool);
       //NPCs -----------------------------------------------------------------
-      NPC DungeonCellDoor = new NPC("Dungeon Cell Door", 10, false, startRoom);
+      NPC DungeonCellDoor = new NPC("Dungeon Cell Door", 10, true, null);
+      startRoom.NPCs.Add("Door", DungeonCellDoor);
       // COMMANDS ------------------------------------------------------------
       game.Commands.Add("Go");
       game.Commands.Add("Take");

@@ -24,6 +24,14 @@ namespace CastleGrimtol.Project.Interfaces
         });
       }
 
+      if (NPCs.Count > 0)
+      {
+        foreach (var npc in NPCs)
+        {
+          message += npc.Value.Hostile ? $"A {npc.Value.Name} Stands in your way." : $"there is a friendly {npc.Value.Name} in here";
+        }
+      }
+
       message += "There are exits to the ";
       foreach (var exit in Exits)
       {

@@ -27,8 +27,12 @@ namespace CastleGrimtol.Project.Models
 
     public string TakeDamage(int damage)
     {
-      CurrentHealth -= damage;
-      return $"You been struck taking {damage} damage";
+      if (damage > 0)
+      {
+        CurrentHealth -= damage;
+        return $"You Have been struck taking {damage} damage";
+      }
+      return $"";
     }
 
     public string TakeItem(IItem item)

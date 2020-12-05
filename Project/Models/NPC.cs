@@ -14,19 +14,19 @@ namespace CastleGrimtol.Project.Models
     public bool Hostile { get; set; }
     public IRoom Room { get; set; }
 
-    public NPC(string name, int health, bool hostile, IRoom room)
+    public NPC(string name, int health, bool hostile, IItem weapon)
     {
       Name = name;
       MaxHealth = health;
       CurrentHealth = health;
       Hostile = hostile;
-      Room = room;
+      weapon = weapon != null ? weapon : new Item(null, null, 0, 0);
     }
 
     public string TakeDamage(int damage)
     {
       CurrentHealth -= damage;
-      return $"You been struck taking {damage} damage";
+      return $"You strike {Name}, it takes {damage} damage";
     }
 
     public string DropItems()

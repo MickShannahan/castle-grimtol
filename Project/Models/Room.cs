@@ -18,7 +18,7 @@ namespace CastleGrimtol.Project.Models
       Description = description;
       Exits = new Dictionary<string, IRoom>();
       Locked = new Dictionary<string, bool>();
-      NPCs = new Dictionary<NPC, bool>();
+      NPCs = new Dictionary<string, NPC>();
       Items = new List<IItem>();
     }
 
