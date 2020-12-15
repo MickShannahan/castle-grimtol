@@ -10,6 +10,8 @@ namespace CastleGrimtol.Controllers
   public class GameController
   {
 
+    public string[] choices = new string[3] { "thing", "thing2", "thing3" };
+
     public GameController()
     {
       StartGame();
@@ -43,7 +45,6 @@ namespace CastleGrimtol.Controllers
           break;
       }
     }
-
     public void NewGame()
     {
       Console.Clear();
